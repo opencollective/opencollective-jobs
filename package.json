@@ -1,0 +1,35 @@
+{
+  "name": "opencollective-jobs",
+  "version": "0.0.0",
+  "description": "some microservices to run as jobs or on-demand",
+  "main": "server.js",
+  "scripts": {
+    "test": "mocha --require test/fixture --recursive"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OpenCollective/opencollective-jobs.git"
+  },
+  "author": "Christopher Hiller <boneskull@boneskull.com> (https://boneskull.com/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/OpenCollective/opencollective-jobs/issues"
+  },
+  "homepage": "https://github.com/OpenCollective/opencollective-jobs#readme",
+  "dependencies": {
+    "bluebird": "^3.4.0",
+    "dotenv": "^2.0.0",
+    "github": "^0.2.4",
+    "lodash": "^4.12.0"
+  },
+  "engines": {
+    "node": ">=5.11.0",
+    "npm": ">=3.8.6"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "eslint": "^2.10.2",
+    "eslint-config-opencollective": "^1.1.0",
+    "mocha": "^2.4.5"
+  }
+}
