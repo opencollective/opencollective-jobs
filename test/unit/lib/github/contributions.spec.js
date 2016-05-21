@@ -13,8 +13,14 @@ describe('lib:github:contributions', () => {
   beforeEach(() => {
     sandbox = sinon.sandbox.create('lib:github:contributions');
     repos = [
-      {name: 'foo'},
-      {name: 'bar'}
+      {
+        name: 'foo',
+        org: 'OpenCollective'
+      },
+      {
+        name: 'bar',
+        org: 'OpenCollective'
+      }
     ];
     client = {
       repos: {
@@ -74,7 +80,7 @@ describe('lib:github:contributions', () => {
       .calledWithExactly(contributionsForOrg.defaultConfig);
   });
 
-  it('should return the value returned by the "getForOrg" method', () => {
+  it('should return aggregated results', () => {
     return expect(contributionsForOrg(client, {}))
       .to
       .eventually

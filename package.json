@@ -4,7 +4,8 @@
   "description": "some microservices to run as jobs or on-demand",
   "main": "server.js",
   "scripts": {
-    "test": "mocha --require test/fixture --recursive"
+    "test": "mocha --require test/fixture --recursive",
+    "start": "node server.js"
   },
   "repository": {
     "type": "git",
@@ -20,7 +21,11 @@
     "bluebird": "^3.4.0",
     "dotenv": "^2.0.0",
     "github4": "^1.1.0",
-    "lodash": "^4.12.0"
+    "lodash": "^4.12.0",
+    "seneca": "^2.0.1",
+    "seneca-cron": "0.0.5",
+    "seneca-postgres-store": "^2.0.0",
+    "seneca-queue": "^0.3.0"
   },
   "engines": {
     "node": ">=5.11.0",
