@@ -1,8 +1,19 @@
 'use strict';
 
-const createClient = require('../../../lib/github').createClient;
+const createClient = require('../../../../lib').github.createClient;
+const GitHub = require('github4');
 
 describe('lib:github:createClient', () => {
+  let sandbox;
+
+  beforeEach(() => {
+    sandbox = sinon.sandbox.create('lib:github:createClient');
+    sandbox.stub(GitHub.prototype, 'authenticate');
+
+    process.env.GITHUB_CLIENT_ID = 'foo';
+    process.env.GITHUB_CLIENT_SECRET = 'bar';
+  });
+
   it('should return a GitHub API client', () => {
     expect(createClient())
       .to
@@ -11,6 +22,19 @@ describe('lib:github:createClient', () => {
       .that
       .is
       .an('object');
+  });
+
+  it('should authenticate', () => {
+    createClient();
+    expect(GitHub.prototype.authenticate)
+      .to
+      .have
+      .been
+      .calledWithExactly({
+        type: 'oauth',
+        key: process.env.GITHUB_CLIENT_ID,
+        secret: process.env.GITHUB_CLIENT_SECRET
+      });
   });
 
   it('should be promisified', () => {
@@ -73,6 +97,7 @@ describe('lib:github:createClient', () => {
         });
       });
     });
+
     describe('and the config does not contain a "version" property', () => {
       beforeEach(() => {
         config = {timeout: 10000};
@@ -93,5 +118,9 @@ describe('lib:github:createClient', () => {
         });
       });
     });
+  });
+
+  afterEach(() => {
+    sandbox.restore();
   });
 });

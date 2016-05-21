@@ -1,6 +1,7 @@
 'use strict';
 
-const contributionsForOrg = require('../../../lib/github').contributionsForOrg;
+const contributionsForOrg = require(
+  '../../../../lib').github.contributionsForOrg;
 const Promise = require('bluebird');
 
 describe('lib:github:contributions', () => {
