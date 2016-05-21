@@ -18,7 +18,7 @@ describe('lib:github:createClient', () => {
       .to
       .have
       .deep
-      .property('repos.getFromOrgAsync')
+      .property('repos.getForOrgAsync')
       .that
       .is
       .a('function');
