@@ -12,7 +12,7 @@ module.exports = function wallabyConfig () {
     ],
 
     tests: [
-      'test/**/*.spec.js'
+      'test/unit/**/*.spec.js'
     ],
 
     testFramework: 'mocha',
