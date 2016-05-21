@@ -7,17 +7,62 @@ const Promise = require('bluebird');
 describe('lib:github:contributions', () => {
   let sandbox;
   let client;
-  let data;
+  let repos;
+  let results;
 
   beforeEach(() => {
     sandbox = sinon.sandbox.create('lib:github:contributions');
-    data = {};
+    repos = [
+      {name: 'foo'},
+      {name: 'bar'}
+    ];
     client = {
       repos: {
         getForOrgAsync: sandbox.stub()
-          .returns(Promise.resolve(data))
+          .returns(Promise.resolve(repos)),
+        getContributorsAsync: sandbox.stub()
+          .returns(Promise.resolve([
+            {
+              login: 'boneskull',
+              contributions: 42
+            },
+            {
+              login: 'xdamman',
+              contributions: 55
+            }
+          ]))
       }
     };
+    results = [
+      [
+        {
+          login: 'boneskull',
+          repo: 'foo',
+          org: 'OpenCollective',
+          contributions: 42
+        },
+        {
+          login: 'xdamman',
+          repo: 'foo',
+          org: 'OpenCollective',
+          contributions: 55
+        }
+      ],
+      [
+        {
+          login: 'boneskull',
+          repo: 'bar',
+          org: 'OpenCollective',
+          contributions: 42
+        },
+        {
+          login: 'xdamman',
+          repo: 'bar',
+          org: 'OpenCollective',
+          contributions: 55
+        }
+      ]
+    ];
   });
 
   it('should call the "getForOrg" method with the default org', () => {
@@ -33,7 +78,7 @@ describe('lib:github:contributions', () => {
     return expect(contributionsForOrg(client, {}))
       .to
       .eventually
-      .equal(data);
+      .eql(results);
   });
 
   it('should allow a custom "org" property', () => {
@@ -42,7 +87,10 @@ describe('lib:github:contributions', () => {
       .to
       .have
       .been
-      .calledWithExactly({org: 'foo'});
+      .calledWithExactly({
+        org: 'foo',
+        type: 'public'
+      });
   });
 
   describe('when curried', () => {
@@ -65,7 +113,7 @@ describe('lib:github:contributions', () => {
       return expect(curried({}))
         .to
         .eventually
-        .equal(data);
+        .eql(results);
     });
 
     it('should allow a custom "org" property', () => {
@@ -74,7 +122,10 @@ describe('lib:github:contributions', () => {
         .to
         .have
         .been
-        .calledWithExactly({org: 'foo'});
+        .calledWithExactly({
+          org: 'foo',
+          type: 'public'
+        });
     });
 
   });
