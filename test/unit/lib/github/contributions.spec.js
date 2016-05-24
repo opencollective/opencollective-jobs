@@ -1,7 +1,6 @@
 'use strict';
 
-const contributionsForOrg = require(
-  '../../../../lib').github.contributionsForOrg;
+const contributions = require('../../../../lib/github/contrib');
 const Promise = require('bluebird');
 
 describe('lib:github:contributions', () => {
@@ -14,12 +13,10 @@ describe('lib:github:contributions', () => {
     sandbox = sinon.sandbox.create('lib:github:contributions');
     repos = [
       {
-        name: 'foo',
-        org: 'OpenCollective'
+        name: 'foo'
       },
       {
-        name: 'bar',
-        org: 'OpenCollective'
+        name: 'bar'
       }
     ];
     client = {
@@ -39,63 +36,52 @@ describe('lib:github:contributions', () => {
           ]))
       }
     };
-    results = [
-      [
-        {
-          login: 'boneskull',
-          repo: 'foo',
-          org: 'OpenCollective',
-          contributions: 42
+    results = {
+      quux: {
+        foo: {
+          boneskull: 42,
+          xdamman: 55
         },
-        {
-          login: 'xdamman',
-          repo: 'foo',
-          org: 'OpenCollective',
-          contributions: 55
+        bar: {
+          boneskull: 42,
+          xdamman: 55
         }
-      ],
-      [
-        {
-          login: 'boneskull',
-          repo: 'bar',
-          org: 'OpenCollective',
-          contributions: 42
-        },
-        {
-          login: 'xdamman',
-          repo: 'bar',
-          org: 'OpenCollective',
-          contributions: 55
-        }
-      ]
-    ];
+      }
+    };
   });
 
-  it('should call the "getForOrg" method with the default org', () => {
-    contributionsForOrg(client, {});
-    expect(client.repos.getForOrgAsync)
-      .to
-      .have
-      .been
-      .calledWithExactly(contributionsForOrg.defaultConfig);
+  it('should call the "getForOrg" method', () => {
+    return contributions(client, {orgs: ['quux']})
+      .then(() => {
+        expect(client.repos.getForOrgAsync)
+          .to
+          .have
+          .been
+          .calledWithExactly({
+            org: 'quux',
+            type: 'public'
+          });
+      });
   });
 
   it('should return aggregated results', () => {
-    return expect(contributionsForOrg(client, {}))
+    return expect(contributions(client, {orgs: ['quux']}))
       .to
       .eventually
       .eql(results);
   });
 
   it('should allow a custom "org" property', () => {
-    contributionsForOrg(client, {org: 'foo'});
-    expect(client.repos.getForOrgAsync)
-      .to
-      .have
-      .been
-      .calledWithExactly({
-        org: 'foo',
-        type: 'public'
+    return contributions(client, {orgs: ['quux']})
+      .then(() => {
+        expect(client.repos.getForOrgAsync)
+          .to
+          .have
+          .been
+          .calledWithExactly({
+            org: 'quux',
+            type: 'public'
+          });
       });
   });
 
@@ -103,41 +89,32 @@ describe('lib:github:contributions', () => {
     let curried;
 
     beforeEach(() => {
-      curried = contributionsForOrg(client);
+      curried = contributions(client);
     });
 
-    it('should call the "getForOrg" method with the default org', () => {
-      curried({});
-      expect(client.repos.getForOrgAsync)
-        .to
-        .have
-        .been
-        .calledWithExactly(contributionsForOrg.defaultConfig);
+    it('should call the "getForOrg" method', () => {
+      return curried({orgs: ['quux']})
+        .then(() => {
+          expect(client.repos.getForOrgAsync)
+            .to
+            .have
+            .been
+            .calledWithExactly({
+              org: 'quux',
+              type: 'public'
+            });
+        });
     });
 
     it('should return the value returned by the "getForOrg" method', () => {
-      return expect(curried({}))
+      return expect(curried({orgs: ['quux']}))
         .to
         .eventually
         .eql(results);
     });
-
-    it('should allow a custom "org" property', () => {
-      curried({org: 'foo'});
-      expect(client.repos.getForOrgAsync)
-        .to
-        .have
-        .been
-        .calledWithExactly({
-          org: 'foo',
-          type: 'public'
-        });
-    });
-
   });
 
   afterEach(() => {
     sandbox.restore();
   });
-
 });

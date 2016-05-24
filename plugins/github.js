@@ -8,13 +8,16 @@ function githubPlugin () {
   const seneca = this;
 
   const client = github.createClient();
-  const contributionsForOrg = github.contributionsForOrg(client);
 
   seneca.add({
     role: plugin,
-    cmd: 'contributors'
+    cmd: 'contributions'
   }, (options, callback) => {
-    return contributionsForOrg(options)
+    return client.contributions({
+      org: options.org,
+      type: options.type,
+      external: options.external
+    })
       .asCallback(callback);
   });
 

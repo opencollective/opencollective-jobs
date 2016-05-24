@@ -44,5 +44,3 @@ server/views/partials/sprite.symbol.html
 output/
 test-results.xml
 
-# extra binaries
-bin

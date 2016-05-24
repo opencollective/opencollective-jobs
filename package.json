@@ -3,6 +3,9 @@
   "version": "0.0.0",
   "description": "some microservices to run as jobs or on-demand",
   "main": "server.js",
+  "bin": {
+    "ghorg": "bin/ghorg.js"
+  },
   "scripts": {
     "test": "mocha --require test/fixture --recursive",
     "start": "node server.js"
@@ -22,10 +25,12 @@
     "dotenv": "^2.0.0",
     "github4": "^1.1.0",
     "lodash": "^4.12.0",
+    "npmlog": "^2.0.4",
     "seneca": "^2.0.1",
     "seneca-cron": "0.0.5",
     "seneca-postgres-store": "^2.0.0",
-    "seneca-queue": "^0.3.0"
+    "seneca-queue": "^0.3.0",
+    "yargs": "^4.7.1"
   },
   "engines": {
     "node": ">=5.11.0",

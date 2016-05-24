@@ -6,6 +6,19 @@ const GitHub = require('github4');
 describe('lib:github:createClient', () => {
   let sandbox;
 
+  before(() => {
+    // wallaby weirdness; also avoid anything set in user's environment
+    if (process.env) {
+      delete process.env.GITHUB_OAUTH_TOKEN;
+      delete process.env.GITHUB_CLIENT_ID;
+      delete process.env.GITHUB_CLIENT_SECRET;
+      delete process.env.GITHUB_USERNAME;
+      delete process.env.GITHUB_PASSWORD;
+    } else {
+      process.env = {};
+    }
+  });
+
   beforeEach(() => {
     sandbox = sinon.sandbox.create('lib:github:createClient');
     sandbox.stub(GitHub.prototype, 'authenticate');
@@ -14,14 +27,14 @@ describe('lib:github:createClient', () => {
     process.env.GITHUB_CLIENT_SECRET = 'bar';
   });
 
-  it('should return a GitHub API client', () => {
+  it('should return a client object', () => {
     expect(createClient())
       .to
       .have
-      .property('repos')
+      .property('contributions')
       .that
       .is
-      .an('object');
+      .a('function');
   });
 
   it('should authenticate', () => {
@@ -37,17 +50,6 @@ describe('lib:github:createClient', () => {
       });
   });
 
-  it('should be promisified', () => {
-    expect(createClient())
-      .to
-      .have
-      .deep
-      .property('repos.getForOrgAsync')
-      .that
-      .is
-      .a('function');
-  });
-
   describe('when no config is specified', () => {
     describe('the resulting GitHub API client', () => {
       let client;
@@ -57,7 +59,7 @@ describe('lib:github:createClient', () => {
       });
 
       it('should use the default config', () => {
-        expect(client.config)
+        expect(client.client.config)
           .to
           .eql(createClient.defaultConfig);
       });
@@ -83,17 +85,19 @@ describe('lib:github:createClient', () => {
         });
 
         it('should not reflect the "version" property"', () => {
-          expect(client.config)
+          expect(client)
             .to
             .have
-            .property('version', '3.0.0');
+            .deep
+            .property('client.config.version', '3.0.0');
         });
 
         it('should reflect the other override(s)', () => {
-          expect(client.config)
+          expect(client)
             .to
             .have
-            .property('timeout', 10000);
+            .deep
+            .property('client.config.timeout', 10000);
         });
       });
     });
@@ -111,10 +115,11 @@ describe('lib:github:createClient', () => {
         });
 
         it('should reflect the override(s)', () => {
-          expect(client.config)
+          expect(client)
             .to
             .have
-            .property('timeout', 10000);
+            .deep
+            .property('client.config.timeout', 10000);
         });
       });
     });
