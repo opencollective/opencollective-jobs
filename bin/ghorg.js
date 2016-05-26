@@ -2,6 +2,7 @@
 'use strict';
 
 const logger = require('../lib/logger');
+require('dotenv').load();
 
 const argv = require('yargs')
   .usage('$0 [options] <command>')
