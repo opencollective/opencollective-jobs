@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 'use strict';
 
-const logger = require('../lib/logger');
 require('dotenv').load();
+const logger = require('../lib/logger');
 
 const argv = require('yargs')
   .usage('$0 [options] <command>')
@@ -31,5 +31,4 @@ const argv = require('yargs')
   .version()
   .help('help').argv;
 
-logger.level = argv.loglevel;
 

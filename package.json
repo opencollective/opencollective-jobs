@@ -29,6 +29,7 @@
     "seneca-cron": "0.0.5",
     "seneca-postgres-store": "^2.0.0",
     "seneca-queue": "^0.3.0",
+    "stampit": "^2.1.1",
     "yargs": "^4.7.1"
   },
   "engines": {
