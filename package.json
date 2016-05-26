@@ -7,8 +7,7 @@
     "ghorg": "bin/ghorg.js"
   },
   "scripts": {
-    "test": "mocha --require test/fixture --recursive",
-    "start": "node server.js"
+    "test": "nsp check && mocha --require test/fixture --recursive"
   },
   "repository": {
     "type": "git",
@@ -42,6 +41,7 @@
     "eslint": "^2.10.2",
     "eslint-config-opencollective": "^1.1.0",
     "mocha": "^2.4.5",
+    "nsp": "^2.4.0",
     "sinon": "^1.17.4",
     "sinon-chai": "^2.8.0"
   }
