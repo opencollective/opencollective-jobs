@@ -1,8 +1,6 @@
 #!/usr/bin/env node
 'use strict';
 
-const tty = require('tty');
-const log = require('../lib/logger');
 require('dotenv').load();
 
 require('yargs')
