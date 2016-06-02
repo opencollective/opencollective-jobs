@@ -6,7 +6,7 @@
 
 You'll need to set one of the following sets of environment variables if you want to be authenticated with the GitHub API:
 
-- `GITHUB_OAUTH_TOKEN` (personal access token)
+- `GITHUB_OAUTH_TOKEN` (personal access token; **this is the preferred method**)
 - `GITHUB_CLIENT_ID` and `GITHUB_CLIENT_SECRET` (for machine-to-machine communication)
 - `GITHUB_USERNAME` and `GITHUB_PASSWORD` (basic auth; will not work with 2FA enabled)
 
