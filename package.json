@@ -7,7 +7,7 @@
     "ghorg": "bin/ghorg.js"
   },
   "scripts": {
-    "test": "nsp check && mocha --require test/fixture --recursive"
+    "test": "nsp check && mocha --require test/fixture --recursive test/unit"
   },
   "repository": {
     "type": "git",

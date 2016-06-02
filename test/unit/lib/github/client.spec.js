@@ -266,25 +266,27 @@ describe('lib:github:client', () => {
             name: 'bar'
           }
         ];
-        sandbox.stub(client.repos, 'getForOrgAsync')
+        sandbox.stub(client, 'getAllPagesAsync')
           .returns(Promise.resolve(repos));
         opts = {};
       });
 
       it('should defer to API "repos.getForOrgAsync"', () => {
-        client.reposForOrg(opts);
-        expect(client.repos.getForOrgAsync)
-          .to
-          .have
-          .been
-          .calledWithExactly(opts);
+        return client.reposForOrg(opts)
+          .then(() => {
+            expect(client.getAllPagesAsync)
+              .to
+              .have
+              .been
+              .calledWithExactly(client.repos.getForOrg, opts);
+          })
       });
 
       it('should return an array of repo names', () => {
         return expect(client.reposForOrg(opts))
           .to
           .eventually
-          .eql(_.map('name', repos));
+          .eql(repos);
       });
     });
 
@@ -302,18 +304,20 @@ describe('lib:github:client', () => {
             contributions: 55
           }
         ];
-        sandbox.stub(client.repos, 'getContributorsAsync')
+        sandbox.stub(client, 'getAllPagesAsync')
           .returns(Promise.resolve(contributors));
         opts = {};
       });
 
       it('should defer to API "repos.getContributorsAsync"', () => {
-        client.contributorsForRepo(opts);
-        expect(client.repos.getContributorsAsync)
-          .to
-          .have
-          .been
-          .calledWithExactly(opts);
+        return client.contributorsForRepo(opts)
+          .then(() => {
+            expect(client.getAllPagesAsync)
+              .to
+              .have
+              .been
+              .calledWithExactly(client.repos.getContributors, opts);
+          })
       });
 
       it('should return an array of user & contribution data', () => {
@@ -339,48 +343,57 @@ describe('lib:github:client', () => {
             login: 'bar'
           }
         ];
-        sandbox.stub(client.orgs, 'getMembersAsync')
-          .returns(Promise.resolve(members));
-        sandbox.stub(client.orgs, 'getPublicMembersAsync')
+        sandbox.stub(client, 'getAllPagesAsync')
           .returns(Promise.resolve(members.slice(1)));
         opts = {org: 'baz'};
       });
 
-      it('should defer to API "orgs.getPublicMembersAsync"', () => {
-        client.membersOfOrg(opts);
-        expect(client.orgs.getPublicMembersAsync)
-          .to
-          .have
-          .been
-          .calledWithExactly(opts);
+      it('should defer to API "orgs.getPulibcMembers"', () => {
+        return client.membersOfOrg(opts)
+          .then(() => {
+            expect(client.getAllPagesAsync)
+              .to
+              .have
+              .been
+              .calledWithExactly(client.orgs.getPublicMembers, opts);
+          })
       });
 
       it('should return an array of public members', () => {
         return expect(client.membersOfOrg(opts))
           .to
           .eventually
-          .eql(_.map(value => ({user: value.login}), members.slice(1)));
+          .eql(members.slice(1)
+            .map(member => member.login));
       });
 
       describe('when called with option "private: true"', () => {
         beforeEach(() => {
-          opts = {org: 'baz', private: true};
+          client.getAllPagesAsync.restore();
+          sandbox.stub(client, 'getAllPagesAsync')
+            .returns(Promise.resolve(members));
+          opts = {
+            org: 'baz',
+            private: true
+          };
         });
 
-        it('should defer to API "orgs.getPublicMembersAsync"', () => {
-          client.membersOfOrg(opts);
-          expect(client.orgs.getMembersAsync)
-            .to
-            .have
-            .been
-            .calledWithExactly({org: 'baz'});
+        it('should defer to API "orgs.getMembers"', () => {
+          return client.membersOfOrg(opts)
+            .then(() => {
+              expect(client.getAllPagesAsync)
+                .to
+                .have
+                .been
+                .calledWithExactly(client.orgs.getMembers, {org: 'baz'});
+            });
         });
 
         it('should return an array of public members', () => {
           return expect(client.membersOfOrg(opts))
             .to
             .eventually
-            .eql(_.map(value => ({user: value.login}), members));
+            .eql(_.map(value => value.login, members));
         });
       });
     });
