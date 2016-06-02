@@ -1,6 +1,6 @@
 {
   "name": "opencollective-jobs",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "some microservices to run as jobs or on-demand",
   "main": "lib/index.js",
   "bin": {
