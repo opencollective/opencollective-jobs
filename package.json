@@ -2,7 +2,7 @@
   "name": "opencollective-jobs",
   "version": "0.0.0",
   "description": "some microservices to run as jobs or on-demand",
-  "main": "server.js",
+  "main": "lib/index.js",
   "bin": {
     "ghorg": "bin/ghorg.js"
   },

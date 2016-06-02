@@ -1,6 +1,6 @@
 'use strict';
 
-const Client = require('../../../../lib').github;
+const Client = require('../../../../lib').GitHubClient;
 const _ = require('lodash/fp');
 const Promise = require('bluebird');
 
@@ -118,21 +118,6 @@ describe('lib:github:client', () => {
       });
     });
 
-    describe('logging', () => {
-      it('should init a logging context', () => {
-        expect(client.loggingContext)
-          .to
-          .eql([require('npmlog')]);
-      });
-
-      it('should expose a property descriptor "log"', () => {
-        expect(client)
-          .to
-          .have
-          .ownPropertyDescriptor('log');
-      });
-    });
-
     describe('when no config is specified', () => {
       describe('the resulting GitHub API client', () => {
         let client;
@@ -193,30 +178,6 @@ describe('lib:github:client', () => {
         });
       });
 
-  });
-
-  describe('property descriptor', () => {
-    let client;
-
-    beforeEach(() => {
-      client = Client();
-    });
-
-    describe('log', () => {
-      it('should not have a setter', () => {
-        expect(() => {
-          client.log = 'foo';
-        })
-          .to
-          .throw(Error);
-      });
-
-      it('should return the last element in loggingContext', () => {
-        expect(client.log)
-          .to
-          .equal(_.last(client.loggingContext));
-      });
-    });
   });
 
   describe('method', () => {
