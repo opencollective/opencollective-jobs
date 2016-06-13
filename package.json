@@ -7,9 +7,7 @@
     "ghorg": "bin/ghorg.js"
   },
   "scripts": {
-    "test": "nsp check && mocha --require test/fixture --recursive test/unit",
-    "publish-please": "publish-please",
-    "prepublish": "publish-please guard"
+    "test": "nsp check && mocha --require test/fixture --recursive test/unit"
   },
   "repository": {
     "type": "git",
@@ -44,7 +42,7 @@
     "eslint": "^2.10.2",
     "eslint-config-opencollective": "^1.1.0",
     "mocha": "^2.4.5",
-    "publish-please": "^2.1.4",
+    "nsp": "^2.4.0",
     "sinon": "^1.17.4",
     "sinon-chai": "^2.8.0"
   }
