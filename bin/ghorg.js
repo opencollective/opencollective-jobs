@@ -24,7 +24,20 @@ require('yargs')
     type: 'boolean',
     global: true
   })
+  .option('pretty', {
+    default: false,
+    describe: 'Pretty-print JSON output',
+    type: 'boolean',
+    global: true
+  })
+  .option('host', {
+    describe: 'Host if not api.github.com (for GitHub Enterprise)',
+    type: 'string',
+    default: 'api.github.com',
+    global: true
+  })
   .command(require('../lib/commands/contrib'))
+  .command(require('../lib/commands/helped'))
   .demand(1, 'Please specify a command!')
   .showHelpOnFail(true)
   .check(argv => {
