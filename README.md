@@ -1,5 +1,7 @@
 # opencollective-jobs
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/opencollective/opencollective-jobs.svg)](https://greenkeeper.io/)
+
 > some microservices and views into them
 
 ## Env Vars
